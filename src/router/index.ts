@@ -1,20 +1,15 @@
-import { createWebHistory, createRouter } from "vue-router";
-
+import { createWebHashHistory, createRouter } from "vue-router";
+import Home from "../pages/Home.vue";
 const routes = [
-  //   {
-  //     path: "/home",
-  //     name: "Home",
-  //     component: Home,
-  //   },
-  //   {
-  //     path: "/about",
-  //     name: "About",
-  //     component: About,
-  //   },
+  {
+    path: "/",
+    name: "Home",
+    component: Home,
+  },
 ];
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(),
   routes,
 });
 

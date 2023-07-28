@@ -53,7 +53,7 @@ app.on("window-all-closed", () => {
 });
 const keyListener = new KeyListener();
 keyListener.on("keyDown", (key) => {
-  console.log(key + " down");
+  console.log(key + " down1");
   if (key.keyName == "F7") {
     const inventory = new Inventory();
     inventory.init();

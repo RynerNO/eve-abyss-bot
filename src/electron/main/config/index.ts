@@ -31,7 +31,7 @@ export const TEMPLATES = {
   },
   invTabs: {
     ship: {
-      imgs: Array.from({ length: 3 }, (_, i) =>
+      imgs: Array.from({ length: 2 }, (_, i) =>
         resolvePath("images", "templates", `tabsShip${i + 1}.png`)
       ),
     },

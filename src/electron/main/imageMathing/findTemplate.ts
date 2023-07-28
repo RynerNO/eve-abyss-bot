@@ -22,7 +22,7 @@ export function findTemplate(
       templateWidth: 0,
       templateHeight: 0,
     };
-
+    let i = 0;
     templateImagePaths.forEach((templateImagePath: string) => {
       console.log(templateImagePath);
       const templateImage = new cv(templateImagePath);
@@ -30,9 +30,9 @@ export function findTemplate(
         ? inputImage.getRegion([roi.x, roi.y, roi.width, roi.height])
         : inputImage;
       const matchingResult = searchArea
-        .blur(15, 15)
+        .blur(5, 5)
         .bgrToGray()
-        .matchTemplate(templateImage.blur(15, 15).bgrToGray().imageData);
+        .matchTemplate(templateImage.blur(5, 5).bgrToGray().imageData);
 
       let { maxValue, maxLocation } = matchingResult;
       if (roi) {
@@ -43,6 +43,10 @@ export function findTemplate(
         maxLocation.y = maxLocation.y + roi.y;
       }
 
+      templateImage
+        .blur(5, 5)
+        .bgrToGray()
+        .imwrite(path.resolve(TEST_DIRECTORY, `template${++i}.png`));
       if (maxValue > bestMatch.maxValue) {
         bestMatch = {
           maxValue,
