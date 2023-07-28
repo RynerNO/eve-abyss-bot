@@ -53,19 +53,16 @@ export function findTemplateWithMask(
       return null;
     }
     if (bestMatch.topLeft) {
-      inputImage
-        .drawRectangle(
-          [bestMatch.topLeft.x, bestMatch.topLeft.y],
-          [
-            bestMatch.topLeft.x + bestMatch.templateWidth,
-            bestMatch.topLeft.y + bestMatch.templateHeight,
-          ],
-          [255, 0, 0],
-          2
-        )
-        .imwrite(
-          path.resolve(TEST_DIRECTORY, `matched${bestMatch.maxValue}.png`)
-        );
+      inputImage.drawRectangle(
+        [bestMatch.topLeft.x, bestMatch.topLeft.y],
+        [
+          bestMatch.topLeft.x + bestMatch.templateWidth,
+          bestMatch.topLeft.y + bestMatch.templateHeight,
+        ],
+        [255, 0, 0],
+        2
+      );
+
       const boundingBox = {
         x: bestMatch.topLeft.x,
         y: bestMatch.topLeft.y,

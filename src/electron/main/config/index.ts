@@ -12,8 +12,12 @@ export const IMAGE_DIRECTORY = resolvePath('images');
 export const TEMPLATES_DIRECTORY = resolvePath('images', 'templates');
 export const TEST_DIRECTORY = resolvePath('images', 'test');
 export const DEFAULT_WINDOW_CAPTURE_PATH = resolvePath('images', 'image.bmp');
-export const DEFAULT_WINDOW_NAME = `EVE - ${process.env.CHARACTER_NAME}`;
-
+export const DEFAULT_WINDOW_CAPTURE_PATH_FOR_DRAW = resolvePath(
+  'images',
+  'image_draw.bmp'
+);
+export const DEFAULT_WINDOW_NAME = `EVE - Ryner- Lute`;
+console.log(DEFAULT_WINDOW_NAME);
 export const TEMPLATES = {
   inv: {
     imgs: Array.from({length: 5}, (_, i) =>

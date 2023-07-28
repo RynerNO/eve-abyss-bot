@@ -1,5 +1,7 @@
 import {TEMPLATES} from '../../config';
+import {jsonDB} from '../../db';
 import {findTemplate} from '../../imageMathing';
+import {draw} from '../../imageMathing/draw';
 import {BoundingBox} from '../../imageMathing/types';
 import {logger} from '../../logger';
 
@@ -14,44 +16,54 @@ export class Tabs {
     Hangar: null,
     Items: null,
   };
-  init(inventoryPos: BoundingBox) {
+  constructor(positions: positions | null, inventoryPos?: BoundingBox | null) {
+    if (positions === null) this.init(inventoryPos);
+    else if (positions.Hangar === null) this.initHangarTab(inventoryPos);
+    else if (positions.Items === null) this.initItemsTab(inventoryPos);
+    else if (positions.Ship === null) this.initShipTab(inventoryPos);
+    else this.positions = positions;
+  }
+  initShipTab(inventoryPos?: BoundingBox | null) {
     logger.debug('Try to locate ship tab');
     const Ship = findTemplate(TEMPLATES.invTabs.ship.imgs, inventoryPos);
     if (Ship === null) {
       logger.error('Ship tab not found');
-      return null;
     }
     logger.debug('Ship tab found');
     this.positions.Ship = Ship;
-
+    jsonDB.push('/positions/tabs', this.positions);
+  }
+  initHangarTab(inventoryPos?: BoundingBox | null) {
     logger.debug('Try to locate hangar tab');
     const Hangar = findTemplate(TEMPLATES.invTabs.hangar.imgs, inventoryPos);
-    if (Ship === null) {
+    if (Hangar === null) {
       logger.error('Hangar tab not found');
-      return null;
     }
     logger.debug('Hangar tab found');
     this.positions.Hangar = Hangar;
-
+    jsonDB.push('/positions/tabs', this.positions);
+  }
+  initItemsTab(inventoryPos?: BoundingBox | null) {
     logger.debug('Try to locate items tab');
     const Items = findTemplate(TEMPLATES.invTabs.items.imgs, inventoryPos);
     if (Items === null) {
       logger.error('Items tab not found');
-      return null;
     }
     logger.debug('Items tab found');
     this.positions.Items = Items;
-
-    return true;
+    jsonDB.push('/positions/tabs', this.positions);
   }
-
-  get ShipPosition() {
-    return this.positions.Ship;
+  init(inventoryPos?: BoundingBox | null) {
+    this.initShipTab(inventoryPos);
+    this.initHangarTab(inventoryPos);
+    this.initItemsTab(inventoryPos);
+    jsonDB.push('/positions/tabs', this.positions);
+    return this;
   }
-  get HangarPosition() {
-    return this.positions.Hangar;
-  }
-  get ItemsPosition() {
-    return this.positions.Items;
+  public draw(imagePath: string) {
+    if (!this.positions) return;
+    if (this.positions.Hangar) draw(imagePath, this.positions.Hangar);
+    if (this.positions.Items) draw(imagePath, this.positions.Items);
+    if (this.positions.Ship) draw(imagePath, this.positions.Ship);
   }
 }

@@ -10,7 +10,7 @@ import {BoundingBox} from './types';
  */
 export function findTemplate(
   templateImagePaths: string[],
-  roi?: BoundingBox
+  roi?: BoundingBox | null
 ): null | BoundingBox {
   try {
     const inputImagePath = DEFAULT_WINDOW_CAPTURE_PATH;
@@ -36,9 +36,6 @@ export function findTemplate(
 
       const {maxValue, maxLocation} = matchingResult;
       if (roi) {
-        inputImage
-          .getRegion([roi.x, roi.y, roi.width, roi.height])
-          .imwrite(path.resolve(TEST_DIRECTORY, `matched${1111}.png`));
         maxLocation.x = maxLocation.x + roi.x;
         maxLocation.y = maxLocation.y + roi.y;
       }
@@ -62,19 +59,15 @@ export function findTemplate(
       return null;
     }
     if (bestMatch.topLeft) {
-      inputImage
-        .drawRectangle(
-          [bestMatch.topLeft.x, bestMatch.topLeft.y],
-          [
-            bestMatch.topLeft.x + bestMatch.templateWidth,
-            bestMatch.topLeft.y + bestMatch.templateHeight,
-          ],
-          [255, 0, 0],
-          2
-        )
-        .imwrite(
-          path.resolve(TEST_DIRECTORY, `matched${bestMatch.maxValue}.png`)
-        );
+      inputImage.drawRectangle(
+        [bestMatch.topLeft.x, bestMatch.topLeft.y],
+        [
+          bestMatch.topLeft.x + bestMatch.templateWidth,
+          bestMatch.topLeft.y + bestMatch.templateHeight,
+        ],
+        [255, 0, 0],
+        2
+      );
       const boundingBox = {
         x: bestMatch.topLeft.x,
         y: bestMatch.topLeft.y,

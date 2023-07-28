@@ -2,9 +2,9 @@
   "extends": "./node_modules/gts/tsconfig-google.json",
   "compilerOptions": {
     "esModuleInterop": true,
-    "rootDir": ".",
     "lib": ["esnext", "dom"],
     "skipLibCheck": true,
+    "declaration": true,
     "outDir": "dist/electron"
   },
   "include": ["src/electron/**/*"],

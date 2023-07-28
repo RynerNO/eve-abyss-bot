@@ -1,8 +1,4 @@
-import {
-  captureAndSaveWindow,
-  findTemplate,
-  findTemplateWithMask,
-} from '../../imageMathing';
+import {captureAndSaveWindow, findTemplateWithMask} from '../../imageMathing';
 import {logger} from '../../logger';
 import {
   DEFAULT_WINDOW_CAPTURE_PATH,
@@ -12,12 +8,15 @@ import {
 import {BoundingBox} from '../../imageMathing/types';
 import {SearchBar} from './SearchBar';
 import {Tabs} from './Tab';
+import {draw} from '../../imageMathing/draw';
+import {jsonDB} from '../../db';
 
-export class Inventory {
+class Inventory {
   position: BoundingBox | null = null;
-  searchBar: SearchBar = new SearchBar();
-  tabs: Tabs = new Tabs();
-
+  constructor(position: BoundingBox | null) {
+    this.position = position;
+    if (this.position === null) this.init();
+  }
   public init() {
     captureAndSaveWindow(DEFAULT_WINDOW_NAME, DEFAULT_WINDOW_CAPTURE_PATH);
     const inventory = findTemplateWithMask(
@@ -26,12 +25,16 @@ export class Inventory {
     );
     if (inventory === null) {
       logger.error('Inventory not found');
-      return null;
     }
     logger.debug('Inventory found');
     this.position = inventory;
-    this.searchBar.init(this.position);
-    this.tabs.init(this.position);
-    return true;
+    jsonDB.push('/positions/inventory', this.position);
+    return this;
+  }
+  public draw(imagePath: string) {
+    if (!this.position) return;
+    draw(imagePath, this.position);
   }
 }
+
+export {Inventory, SearchBar, Tabs};
