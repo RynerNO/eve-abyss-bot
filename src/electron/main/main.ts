@@ -1,11 +1,8 @@
-import { join } from "path";
-import { app, BrowserWindow } from "electron";
-import { KeyListener } from "node-native-win-utils";
-import { Inventory } from "./bot/Inventory";
-import path from "path";
-import { ROI, OpenCV as cv } from "node-native-win-utils";
-import { DEFAULT_WINDOW_CAPTURE_PATH, TEST_DIRECTORY } from "./config";
-const isDev = process.env.npm_lifecycle_event === "app:dev" ? true : false;
+import {join} from 'path';
+import {app, BrowserWindow} from 'electron';
+import {KeyListener} from 'node-native-win-utils';
+import {Inventory} from './bot/Inventory';
+const isDev = process.env.npm_lifecycle_event === 'app:dev' ? true : false;
 
 function createWindow() {
   // Create the browser window.
@@ -13,16 +10,16 @@ function createWindow() {
     width: 800,
     height: 600,
     webPreferences: {
-      preload: join(__dirname, "../preload/preload.js"),
+      preload: join(__dirname, '../preload/preload.js'),
     },
   });
 
   // and load the index.html of the app.
   if (isDev) {
-    mainWindow.loadURL("http://localhost:3000"); // Open the DevTools.
+    mainWindow.loadURL('http://localhost:3000'); // Open the DevTools.
     mainWindow.webContents.openDevTools();
   } else {
-    mainWindow.loadFile(join(__dirname, "../../index.html"));
+    mainWindow.loadFile(join(__dirname, '../../index.html'));
   }
   // mainWindow.loadURL( //this doesn't work on macOS in build and preview mode
   //     isDev ?
@@ -36,7 +33,7 @@ function createWindow() {
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   createWindow();
-  app.on("activate", function () {
+  app.on('activate', () => {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
@@ -46,15 +43,15 @@ app.whenReady().then(() => {
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
-app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") {
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
     app.quit();
   }
 });
 const keyListener = new KeyListener();
-keyListener.on("keyDown", (key) => {
-  console.log(key + " down1");
-  if (key.keyName == "F7") {
+keyListener.on('keyDown', key => {
+  console.log(key + ' down1');
+  if (key.keyName === 'F7') {
     const inventory = new Inventory();
     inventory.init();
   }

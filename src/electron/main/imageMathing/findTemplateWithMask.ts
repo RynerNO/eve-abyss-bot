@@ -1,8 +1,8 @@
-import path from "path";
-import { OpenCV as cv } from "node-native-win-utils";
-import { DEFAULT_WINDOW_CAPTURE_PATH, TEST_DIRECTORY } from "../config";
-import { logger } from "../logger";
-import { BoundingBox } from "./types";
+import path from 'path';
+import {OpenCV as cv} from 'node-native-win-utils';
+import {DEFAULT_WINDOW_CAPTURE_PATH, TEST_DIRECTORY} from '../config';
+import {logger} from '../logger';
+import {BoundingBox} from './types';
 /**
  * Finds the template in the input image using the given mask and displays the matched region.
  * @param {string} inputImagePath Input image file path
@@ -20,7 +20,7 @@ export function findTemplateWithMask(
 
     let bestMatch = {
       maxValue: -Infinity,
-      topLeft: null as { x: number; y: number } | null,
+      topLeft: null as {x: number; y: number} | null,
       templateWidth: 0,
       templateHeight: 0,
     };
@@ -36,7 +36,7 @@ export function findTemplateWithMask(
           mask.bgrToGray().imageData
         );
 
-      const { maxValue, maxLocation } = matchingResult;
+      const {maxValue, maxLocation} = matchingResult;
 
       if (maxValue > bestMatch.maxValue) {
         bestMatch = {
@@ -75,7 +75,7 @@ export function findTemplateWithMask(
       return boundingBox;
     }
   } catch (error) {
-    logger.error("Error finding template with mask:", error);
+    logger.error('Error finding template with mask:', error);
     return null;
   }
   return null;

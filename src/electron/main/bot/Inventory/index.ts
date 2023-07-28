@@ -2,16 +2,16 @@ import {
   captureAndSaveWindow,
   findTemplate,
   findTemplateWithMask,
-} from "../../imageMathing";
-import { logger } from "../../logger";
+} from '../../imageMathing';
+import {logger} from '../../logger';
 import {
   DEFAULT_WINDOW_CAPTURE_PATH,
   DEFAULT_WINDOW_NAME,
   TEMPLATES,
-} from "../../config";
-import { BoundingBox } from "../../imageMathing/types";
-import { SearchBar } from "./SearchBar";
-import { Tabs } from "./Tab";
+} from '../../config';
+import {BoundingBox} from '../../imageMathing/types';
+import {SearchBar} from './SearchBar';
+import {Tabs} from './Tab';
 
 export class Inventory {
   position: BoundingBox | null = null;
@@ -25,12 +25,13 @@ export class Inventory {
       TEMPLATES.inv.mask
     );
     if (inventory === null) {
-      logger.error("Inventory not found");
+      logger.error('Inventory not found');
       return null;
     }
-    logger.debug("Inventory found");
+    logger.debug('Inventory found');
     this.position = inventory;
     this.searchBar.init(this.position);
     this.tabs.init(this.position);
+    return true;
   }
 }

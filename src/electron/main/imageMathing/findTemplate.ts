@@ -1,8 +1,8 @@
-import path from "path";
-import { ROI, OpenCV as cv } from "node-native-win-utils";
-import { DEFAULT_WINDOW_CAPTURE_PATH, TEST_DIRECTORY } from "../config";
-import { logger } from "../logger";
-import { BoundingBox } from "./types";
+import path from 'path';
+import {ROI, OpenCV as cv} from 'node-native-win-utils';
+import {DEFAULT_WINDOW_CAPTURE_PATH, TEST_DIRECTORY} from '../config';
+import {logger} from '../logger';
+import {BoundingBox} from './types';
 /**
  * Finds the template in the input image and displays the matched region.
  * @param {string} inputImagePath Input image file path
@@ -18,7 +18,7 @@ export function findTemplate(
 
     let bestMatch = {
       maxValue: -Infinity,
-      topLeft: null as { x: number; y: number } | null,
+      topLeft: null as {x: number; y: number} | null,
       templateWidth: 0,
       templateHeight: 0,
     };
@@ -34,7 +34,7 @@ export function findTemplate(
         .bgrToGray()
         .matchTemplate(templateImage.blur(5, 5).bgrToGray().imageData);
 
-      let { maxValue, maxLocation } = matchingResult;
+      const {maxValue, maxLocation} = matchingResult;
       if (roi) {
         inputImage
           .getRegion([roi.x, roi.y, roi.width, roi.height])
