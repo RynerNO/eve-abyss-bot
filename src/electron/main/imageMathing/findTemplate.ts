@@ -1,5 +1,5 @@
 import path from 'path';
-import {ROI, OpenCV as cv} from 'node-native-win-utils';
+import {OpenCV as cv} from 'node-native-win-utils';
 import {DEFAULT_WINDOW_CAPTURE_PATH, TEST_DIRECTORY} from '../config';
 import {logger} from '../logger';
 import {BoundingBox} from './types';

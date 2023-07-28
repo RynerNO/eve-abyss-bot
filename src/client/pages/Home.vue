@@ -16,8 +16,8 @@
 </template>
 
 <script setup lang="ts">
-import { QBtn } from "quasar";
-import { ref } from "vue";
+import {QBtn} from 'quasar';
+import {ref} from 'vue';
 
 const move = ref(false);
 const drag = ref({

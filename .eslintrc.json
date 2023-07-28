@@ -8,7 +8,9 @@
           "electron",
           "@vitejs/plugin-vue",
           "vite",
-          "@quasar/vite-plugin"
+          "@quasar/vite-plugin",
+          "pinia",
+          "vue-router"
         ]
       }
     ]
