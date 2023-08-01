@@ -1,0 +1,4 @@
+{
+  "watch": ["./src/electron/**/*"],
+  "ext": "ts"
+}

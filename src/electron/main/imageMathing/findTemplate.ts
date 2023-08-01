@@ -1,8 +1,8 @@
-import path from "path";
-import { ROI, OpenCV as cv } from "node-native-win-utils";
-import { DEFAULT_WINDOW_CAPTURE_PATH, TEST_DIRECTORY } from "../config";
-import { logger } from "../logger";
-import { BoundingBox } from "./types";
+import path from 'path';
+import {OpenCV as cv} from 'node-native-win-utils';
+import {DEFAULT_WINDOW_CAPTURE_PATH, TEST_DIRECTORY} from '../config';
+import {logger} from '../logger';
+import {BoundingBox} from './types';
 /**
  * Finds the template in the input image and displays the matched region.
  * @param {string} inputImagePath Input image file path
@@ -10,7 +10,7 @@ import { BoundingBox } from "./types";
  */
 export function findTemplate(
   templateImagePaths: string[],
-  roi?: BoundingBox
+  roi?: BoundingBox | null
 ): null | BoundingBox {
   try {
     const inputImagePath = DEFAULT_WINDOW_CAPTURE_PATH;
@@ -18,11 +18,11 @@ export function findTemplate(
 
     let bestMatch = {
       maxValue: -Infinity,
-      topLeft: null as { x: number; y: number } | null,
+      topLeft: null as {x: number; y: number} | null,
       templateWidth: 0,
       templateHeight: 0,
     };
-
+    let i = 0;
     templateImagePaths.forEach((templateImagePath: string) => {
       console.log(templateImagePath);
       const templateImage = new cv(templateImagePath);
@@ -30,19 +30,20 @@ export function findTemplate(
         ? inputImage.getRegion([roi.x, roi.y, roi.width, roi.height])
         : inputImage;
       const matchingResult = searchArea
-        .blur(15, 15)
+        .blur(5, 5)
         .bgrToGray()
-        .matchTemplate(templateImage.blur(15, 15).bgrToGray().imageData);
+        .matchTemplate(templateImage.blur(5, 5).bgrToGray().imageData);
 
-      let { maxValue, maxLocation } = matchingResult;
+      const {maxValue, maxLocation} = matchingResult;
       if (roi) {
-        inputImage
-          .getRegion([roi.x, roi.y, roi.width, roi.height])
-          .imwrite(path.resolve(TEST_DIRECTORY, `matched${1111}.png`));
         maxLocation.x = maxLocation.x + roi.x;
         maxLocation.y = maxLocation.y + roi.y;
       }
 
+      templateImage
+        .blur(5, 5)
+        .bgrToGray()
+        .imwrite(path.resolve(TEST_DIRECTORY, `template${++i}.png`));
       if (maxValue > bestMatch.maxValue) {
         bestMatch = {
           maxValue,
@@ -58,19 +59,15 @@ export function findTemplate(
       return null;
     }
     if (bestMatch.topLeft) {
-      inputImage
-        .drawRectangle(
-          [bestMatch.topLeft.x, bestMatch.topLeft.y],
-          [
-            bestMatch.topLeft.x + bestMatch.templateWidth,
-            bestMatch.topLeft.y + bestMatch.templateHeight,
-          ],
-          [255, 0, 0],
-          2
-        )
-        .imwrite(
-          path.resolve(TEST_DIRECTORY, `matched${bestMatch.maxValue}.png`)
-        );
+      inputImage.drawRectangle(
+        [bestMatch.topLeft.x, bestMatch.topLeft.y],
+        [
+          bestMatch.topLeft.x + bestMatch.templateWidth,
+          bestMatch.topLeft.y + bestMatch.templateHeight,
+        ],
+        [255, 0, 0],
+        2
+      );
       const boundingBox = {
         x: bestMatch.topLeft.x,
         y: bestMatch.topLeft.y,

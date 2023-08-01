@@ -1,5 +1,5 @@
-import { findTemplate } from './findTemplate';
-import { findTemplateWithMask } from './findTemplateWithMask';
-import { captureAndSaveWindow } from './captureAndSaveWindow';
+import {findTemplate} from './findTemplate';
+import {findTemplateWithMask} from './findTemplateWithMask';
+import {captureAndSaveWindow} from './captureAndSaveWindow';
 
-export { findTemplate, findTemplateWithMask, captureAndSaveWindow };
+export {findTemplate, findTemplateWithMask, captureAndSaveWindow};
