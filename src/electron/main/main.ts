@@ -62,8 +62,9 @@ ipcMain.handle('uiBuildHangar', async (e, args) => {
 
 ipcMain.handle('init', async (e, args) => {
   const data = await uiBuildHangar();
-
-  return drawPositions(data);
+  const image = drawPositions(data);
+  const positions = await jsonDB.getObjectDefault('/positions', null);
+  return {image, positions};
 });
 
 function drawPositions(

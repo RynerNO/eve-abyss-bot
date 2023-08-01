@@ -39,23 +39,43 @@
                         <QItem-section @click="uiBuildHangar"
                           >Build Hangar</QItem-section
                         >
-                        <!-- <QItem-section side>
-                          <QIcon name="keyboard_arrow_right" />
-                        </QItem-section>
-                        <QMenu auto-close anchor="top end" self="top start">
-                          <QList>
-                            <QItem dense clickable>
-                              <QItem-section>3rd level Label</QItem-section>
-                            </QItem>
-                          </QList>
-                        </QMenu> -->
                       </QItem>
                     </QList>
                   </QMenu>
                 </QItem>
 
                 <QSeparator />
+                <QItem clickable>
+                  <QItem-section>UI Manual Positioning</QItem-section>
+                  <QItem-section side>
+                    <QIcon name="keyboard_arrow_right" />
+                  </QItem-section>
 
+                  <QMenu anchor="top end" self="top start">
+                    <QList>
+                      <QItem dense clickable>
+                        <QItem-section>UI Elements</QItem-section>
+                        <QItem-section side>
+                          <QIcon name="keyboard_arrow_right" />
+                        </QItem-section>
+                        <QMenu auto-close anchor="top end" self="top start">
+                          <QList>
+                            <QItem dense clickable>
+                              <QItem-section @click="manualPlacing('undock')"
+                                >Undock</QItem-section
+                              >
+                            </QItem>
+                            <QItem dense clickable>
+                              <QItem-section>Something</QItem-section>
+                            </QItem>
+                          </QList>
+                        </QMenu>
+                      </QItem>
+                    </QList>
+                  </QMenu>
+                </QItem>
+
+                <QSeparator />
                 <QItem clickable v-close-popup>
                   <QItem-section>Quit</QItem-section>
                 </QItem>
@@ -93,20 +113,28 @@
 
 <script setup lang="ts">
 import {RouterView} from 'vue-router';
-import {useImagesStore} from './store';
-import {onBeforeMount} from 'vue';
+import {useImagesStore, usePositionsStore} from './store';
+import {onBeforeMount, onMounted} from 'vue';
 
 const uiBuildHangar = async () => {
   const resp = await window.ipcRenderer.invoke('uiBuildHangar', []);
   const image = useImagesStore();
   image.update(resp);
 };
+onMounted(() => {
+  const positions = usePositionsStore();
+  console.log(positions.positions);
+}),
+  onBeforeMount(async () => {
+    const {image, positions} = await window.ipcRenderer.invoke('init', []);
+    const imageStore = useImagesStore();
+    imageStore.update(image);
+    const positionsStore = usePositionsStore();
+    positionsStore.update(positions);
+    console.log(positions);
+  });
 
-onBeforeMount(async () => {
-  const resp = await window.ipcRenderer.invoke('init', []);
-  const image = useImagesStore();
-  image.update(resp);
-});
+const manualPlacing = (name: string) => {};
 </script>
 
 <style lang="sass" scoped></style>
